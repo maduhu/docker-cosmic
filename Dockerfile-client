@@ -6,10 +6,11 @@ ADD https://raw.githubusercontent.com/MissionCriticalCloud/bubble-toolkit/master
     /etc/cosmic/management/db.properties
 ADD client.xml /usr/local/tomcat/conf/Catalina/localhost/client.xml
 
-RUN sed -i "s/cluster.node.IP=/cluster.node.IP=127.0.0.1/" /etc/cosmic/management/db.properties && \
+RUN apt-get -y update &&  \
+    apt-get -y install ssh && \
+    sed -i "s/cluster.node.IP=/cluster.node.IP=127.0.0.1/" /etc/cosmic/management/db.properties && \
     sed -i "s/db.cloud.host=/db.cloud.host=mariadb/" /etc/cosmic/management/db.properties && \
     sed -i "s/db.usage.host=localhost/db.usage.host=mariadb/" /etc/cosmic/management/db.properties && \
-    mkdir -p /usr/local/tomcat/webapps/client/WEB-INF/classes && \
     echo "JAVA_OPTS=\"${JAVA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1536m -Xmx3584m -XX:MaxPermSize=256M\"" >> /usr/local/tomcat/bin/setenv.sh 
 
 EXPOSE 8080/tcp
