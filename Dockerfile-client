@@ -1,14 +1,15 @@
 FROM tomcat:9.0
 
 ADD https://beta-nexus.mcc.schubergphilis.com/content/repositories/releases/cloud/cosmic/cloud-client-ui/5.1.0.10/cloud-client-ui-5.1.0.10.war \
-    /usr/local/tomcat/webapps
+    /usr/local/tomcat/webapps/client.war
 ADD https://raw.githubusercontent.com/MissionCriticalCloud/bubble-toolkit/master/ci/setup_files/db.properties \
     /etc/cosmic/management/db.properties
-ADD https://raw.githubusercontent.com/MissionCriticalCloud/bubble-toolkit/master/ci/setup_files/client.xml \
-    /usr/local/tomcat/conf/context.xml
+ADD client.xml /usr/local/tomcat/conf/Catalina/localhost/client.xml
 
 RUN sed -i "s/cluster.node.IP=/cluster.node.IP=127.0.0.1/" /etc/cosmic/management/db.properties && \
     sed -i "s/db.cloud.host=/db.cloud.host=mariadb/" /etc/cosmic/management/db.properties && \
-    sed -i "s/db.usage.host=localhost/db.usage.host=mariadb/" /etc/cosmic/management/db.properties
+    sed -i "s/db.usage.host=localhost/db.usage.host=mariadb/" /etc/cosmic/management/db.properties && \
+    mkdir -p /usr/local/tomcat/webapps/client/WEB-INF/classes && \
+    echo "JAVA_OPTS=\"${JAVA_OPTS} -Djava.awt.headless=true -Dfile.encoding=UTF-8 -server -Xms1536m -Xmx3584m -XX:MaxPermSize=256M\"" >> /usr/local/tomcat/bin/setenv.sh 
 
 EXPOSE 8080/tcp

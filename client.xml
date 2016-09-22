@@ -1,0 +1,7 @@
+<Context>
+  <Resources>
+    <PreResources className="org.apache.catalina.webresources.DirResourceSet" base="/etc/cosmic/management" webAppMount="/client" />
+  </Resources>
+  <JarScanner scanAllDirectories="true" />
+</Context>
+
