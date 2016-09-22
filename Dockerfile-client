@@ -1,0 +1,14 @@
+FROM tomcat:9.0
+
+ADD https://beta-nexus.mcc.schubergphilis.com/content/repositories/releases/cloud/cosmic/cloud-client-ui/5.1.0.10/cloud-client-ui-5.1.0.10.war \
+    /usr/local/tomcat/webapps
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/bubble-toolkit/master/ci/setup_files/db.properties \
+    /etc/cosmic/management/db.properties
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/bubble-toolkit/master/ci/setup_files/client.xml \
+    /usr/local/tomcat/conf/context.xml
+
+RUN sed -i "s/cluster.node.IP=/cluster.node.IP=127.0.0.1/" /etc/cosmic/management/db.properties && \
+    sed -i "s/db.cloud.host=/db.cloud.host=mariadb/" /etc/cosmic/management/db.properties && \
+    sed -i "s/db.usage.host=localhost/db.usage.host=mariadb/" /etc/cosmic/management/db.properties
+
+EXPOSE 8080/tcp

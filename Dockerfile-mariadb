@@ -1,0 +1,20 @@
+FROM mariadb:latest
+
+ENV MYSQL_ROOT_PASSWORD cloud
+ENV MYSQL_USER cloud
+ENV MYSQL_PASSWORD cloud
+
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/db-scripts/src/main/resources/create-database.sql \
+    /docker-entrypoint-initdb.d/00_create-database.sql
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/db-scripts/src/main/resources/create-database-premium.sql \
+    /docker-entrypoint-initdb.d/01_create-database-premium.sql
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/db-scripts/src/main/resources/create-schema.sql \
+    /docker-entrypoint-initdb.d/02_create-schema.sql
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/db-scripts/src/main/resources/create-schema-premium.sql \
+    /docker-entrypoint-initdb.d/03_create-schema-premium.sql
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/db-scripts/src/main/resources/templates.sql \
+    /docker-entrypoint-initdb.d/04_templates.sql
+ADD https://raw.githubusercontent.com/MissionCriticalCloud/cosmic/master/cosmic-core/engine/schema/src/test/resources/developer-prefill.sql \
+    /docker-entrypoint-initdb.d/05_developer-prefill.sql
+
+RUN chmod -R 644 /docker-entrypoint-initdb.d/*

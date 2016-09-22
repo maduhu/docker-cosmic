@@ -1,0 +1,18 @@
+version: '2'
+services:
+  mariadb:
+    image: cosmic/mariadb
+    build:
+      context: .
+      dockerfile: Dockerfile-mariadb
+  client:
+    image: cosmic/client
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    links:
+      - mariadb
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
